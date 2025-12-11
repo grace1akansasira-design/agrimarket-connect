@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useCart, Product } from '@/context/CartContext';
 import { toast } from '@/hooks/use-toast';
+import { formatPrice } from '@/lib/utils';
 
 interface ProductCardProps {
   product: Product;
@@ -54,7 +55,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         <div className="flex items-center justify-between pt-2">
-          <span className="text-xl font-bold text-primary">${product.price.toFixed(2)}</span>
+          <span className="text-xl font-bold text-primary">{formatPrice(product.price)}</span>
           <Button
             size="sm"
             onClick={handleAddToCart}

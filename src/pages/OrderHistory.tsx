@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Package, Truck, CheckCircle, Clock, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useOrders } from '@/context/OrderContext';
+import { formatPrice } from '@/lib/utils';
 
 const statusConfig = {
   processing: { label: 'Processing', icon: Clock, color: 'text-accent' },
@@ -91,7 +92,7 @@ const OrderHistory = () => {
                           <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                         </div>
                         <p className="font-medium text-foreground">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          {formatPrice(item.price * item.quantity)}
                         </p>
                       </div>
                     ))}
@@ -108,7 +109,7 @@ const OrderHistory = () => {
                   {/* Order Total */}
                   <div className="border-t border-border pt-4 flex justify-between items-center">
                     <span className="text-muted-foreground">Order Total</span>
-                    <span className="text-xl font-bold text-primary">${order.total.toFixed(2)}</span>
+                    <span className="text-xl font-bold text-primary">{formatPrice(order.total)}</span>
                   </div>
                 </div>
               </div>

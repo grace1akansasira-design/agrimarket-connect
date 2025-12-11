@@ -2,6 +2,7 @@ import { ShoppingCart, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart, Product } from '@/context/CartContext';
 import { toast } from '@/hooks/use-toast';
+import { formatPrice } from '@/lib/utils';
 
 interface BuyerCardProps {
   product: Product;
@@ -51,7 +52,7 @@ const BuyerCard = ({ product }: BuyerCardProps) => {
         </div>
 
         <div className="flex items-center justify-between mt-2">
-          <span className="text-lg font-bold text-primary">${product.price.toFixed(2)}</span>
+          <span className="text-lg font-bold text-primary">{formatPrice(product.price)}</span>
           <Button size="sm" onClick={handleAddToCart} className="gap-1">
             <ShoppingCart className="w-4 h-4" />
             Add

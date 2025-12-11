@@ -5,6 +5,7 @@ import { useProducts } from '@/context/ProductContext';
 import { useCart } from '@/context/CartContext';
 import { toast } from '@/hooks/use-toast';
 import { useState } from 'react';
+import { formatPrice } from '@/lib/utils';
 
 // Mock reviews data
 const mockReviews = [
@@ -111,7 +112,7 @@ const ProductDetails = () => {
             </div>
 
             <div className="text-4xl font-bold text-primary">
-              ${product.price.toFixed(2)}
+              {formatPrice(product.price)}
             </div>
 
             <p className="text-muted-foreground text-lg leading-relaxed">
@@ -149,7 +150,7 @@ const ProductDetails = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-foreground">Free Delivery</p>
-                  <p className="text-xs text-muted-foreground">Orders over $50</p>
+                  <p className="text-xs text-muted-foreground">Orders over UGX 185,000</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -236,7 +237,7 @@ const ProductDetails = () => {
                     <div className="p-4">
                       <h3 className="font-semibold text-foreground line-clamp-1">{relatedProduct.name}</h3>
                       <p className="text-sm text-muted-foreground">{relatedProduct.farmer}</p>
-                      <p className="text-lg font-bold text-primary mt-2">${relatedProduct.price.toFixed(2)}</p>
+                      <p className="text-lg font-bold text-primary mt-2">{formatPrice(relatedProduct.price)}</p>
                     </div>
                   </div>
                 </Link>
