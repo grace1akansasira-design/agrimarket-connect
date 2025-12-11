@@ -10,7 +10,7 @@ export interface Product {
   description?: string;
 }
 
-interface CartItem extends Product {
+export interface CartItem extends Product {
   quantity: number;
 }
 
