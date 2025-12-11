@@ -1,12 +1,21 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { CreditCard, Truck, CheckCircle } from 'lucide-react';
+import { CreditCard, Truck, CheckCircle, Smartphone, Wallet, Banknote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCart } from '@/context/CartContext';
 import { useOrders } from '@/context/OrderContext';
 import { toast } from '@/hooks/use-toast';
+
+type PaymentMethod = 'card' | 'mobile-money' | 'wallet' | 'cod';
+
+const paymentMethods = [
+  { id: 'card' as const, label: 'Credit/Debit Card', icon: CreditCard, description: 'Visa, Mastercard, etc.' },
+  { id: 'mobile-money' as const, label: 'Mobile Money', icon: Smartphone, description: 'M-Pesa, GCash, MTN' },
+  { id: 'wallet' as const, label: 'Digital Wallet', icon: Wallet, description: 'Apple Pay, Google Pay' },
+  { id: 'cod' as const, label: 'Cash on Delivery', icon: Banknote, description: 'Pay when you receive' },
+];
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -15,6 +24,7 @@ const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [orderId, setOrderId] = useState<string>('');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -22,9 +32,13 @@ const Checkout = () => {
     address: '',
     city: '',
     zip: '',
+    // Card details
     cardNumber: '',
     expiry: '',
     cvv: '',
+    // Mobile money
+    mobileNumber: '',
+    mobileProvider: 'mpesa',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,7 +67,7 @@ const Checkout = () => {
 
     toast({
       title: "Order Placed!",
-      description: "Your order has been successfully placed.",
+      description: `Payment via ${paymentMethods.find(m => m.id === paymentMethod)?.label} successful.`,
     });
   };
 
@@ -101,7 +115,7 @@ const Checkout = () => {
             {/* Left Column - Forms */}
             <div className="space-y-6">
               {/* Shipping Info */}
-              <div className="bg-card rounded-xl shadow-soft p-6">
+              <div className="bg-card rounded-xl shadow-soft p-6 border border-border">
                 <div className="flex items-center gap-2 mb-4">
                   <Truck className="w-5 h-5 text-primary" />
                   <h2 className="text-lg font-semibold text-foreground">Shipping Information</h2>
@@ -161,53 +175,168 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Payment Info */}
-              <div className="bg-card rounded-xl shadow-soft p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <CreditCard className="w-5 h-5 text-primary" />
-                  <h2 className="text-lg font-semibold text-foreground">Payment Information</h2>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="cardNumber">Card Number</Label>
-                    <Input
-                      id="cardNumber"
-                      placeholder="1234 5678 9012 3456"
-                      required
-                      value={formData.cardNumber}
-                      onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value })}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="expiry">Expiry Date</Label>
-                      <Input
-                        id="expiry"
-                        placeholder="MM/YY"
-                        required
-                        value={formData.expiry}
-                        onChange={(e) => setFormData({ ...formData, expiry: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="cvv">CVV</Label>
-                      <Input
-                        id="cvv"
-                        placeholder="123"
-                        required
-                        value={formData.cvv}
-                        onChange={(e) => setFormData({ ...formData, cvv: e.target.value })}
-                      />
-                    </div>
-                  </div>
+              {/* Payment Method Selection */}
+              <div className="bg-card rounded-xl shadow-soft p-6 border border-border">
+                <h2 className="text-lg font-semibold text-foreground mb-4">Payment Method</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {paymentMethods.map((method) => {
+                    const Icon = method.icon;
+                    return (
+                      <button
+                        key={method.id}
+                        type="button"
+                        onClick={() => setPaymentMethod(method.id)}
+                        className={`p-4 rounded-xl border-2 transition-all text-left ${
+                          paymentMethod === method.id
+                            ? 'border-primary bg-primary/5'
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        <Icon className={`w-6 h-6 mb-2 ${paymentMethod === method.id ? 'text-primary' : 'text-muted-foreground'}`} />
+                        <p className="font-medium text-foreground text-sm">{method.label}</p>
+                        <p className="text-xs text-muted-foreground">{method.description}</p>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
+
+              {/* Payment Details based on method */}
+              {paymentMethod === 'card' && (
+                <div className="bg-card rounded-xl shadow-soft p-6 border border-border">
+                  <div className="flex items-center gap-2 mb-4">
+                    <CreditCard className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-semibold text-foreground">Card Details</h2>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="cardNumber">Card Number</Label>
+                      <Input
+                        id="cardNumber"
+                        placeholder="1234 5678 9012 3456"
+                        required
+                        value={formData.cardNumber}
+                        onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value })}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="expiry">Expiry Date</Label>
+                        <Input
+                          id="expiry"
+                          placeholder="MM/YY"
+                          required
+                          value={formData.expiry}
+                          onChange={(e) => setFormData({ ...formData, expiry: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="cvv">CVV</Label>
+                        <Input
+                          id="cvv"
+                          placeholder="123"
+                          required
+                          value={formData.cvv}
+                          onChange={(e) => setFormData({ ...formData, cvv: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'mobile-money' && (
+                <div className="bg-card rounded-xl shadow-soft p-6 border border-border">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Smartphone className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-semibold text-foreground">Mobile Money Details</h2>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="mobileProvider">Provider</Label>
+                      <select
+                        id="mobileProvider"
+                        className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        value={formData.mobileProvider}
+                        onChange={(e) => setFormData({ ...formData, mobileProvider: e.target.value })}
+                      >
+                        <option value="mpesa">M-Pesa</option>
+                        <option value="gcash">GCash</option>
+                        <option value="mtn">MTN Mobile Money</option>
+                        <option value="airtel">Airtel Money</option>
+                        <option value="orange">Orange Money</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="mobileNumber">Mobile Number</Label>
+                      <Input
+                        id="mobileNumber"
+                        type="tel"
+                        placeholder="+254 7XX XXX XXX"
+                        required
+                        value={formData.mobileNumber}
+                        onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })}
+                      />
+                    </div>
+                    <div className="bg-accent/10 rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">
+                        You will receive a payment prompt on your phone. Please enter your PIN to complete the transaction.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'wallet' && (
+                <div className="bg-card rounded-xl shadow-soft p-6 border border-border">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Wallet className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-semibold text-foreground">Digital Wallet</h2>
+                  </div>
+                  <div className="space-y-3">
+                    <button
+                      type="button"
+                      className="w-full p-4 rounded-xl border-2 border-border hover:border-primary/50 transition-all flex items-center gap-3"
+                    >
+                      <div className="w-10 h-10 bg-foreground rounded-lg flex items-center justify-center">
+                        <span className="text-background text-lg font-bold">A</span>
+                      </div>
+                      <span className="font-medium text-foreground">Apple Pay</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="w-full p-4 rounded-xl border-2 border-border hover:border-primary/50 transition-all flex items-center gap-3"
+                    >
+                      <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <span className="text-primary-foreground text-lg font-bold">G</span>
+                      </div>
+                      <span className="font-medium text-foreground">Google Pay</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'cod' && (
+                <div className="bg-card rounded-xl shadow-soft p-6 border border-border">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Banknote className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-semibold text-foreground">Cash on Delivery</h2>
+                  </div>
+                  <div className="bg-accent/10 rounded-lg p-4">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Pay with cash when your order is delivered. Please have the exact amount ready.
+                    </p>
+                    <p className="text-sm font-medium text-foreground">
+                      Amount due: <span className="text-primary">${total.toFixed(2)}</span>
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Right Column - Order Summary */}
             <div>
-              <div className="bg-card rounded-xl shadow-soft p-6 sticky top-24">
+              <div className="bg-card rounded-xl shadow-soft p-6 sticky top-24 border border-border">
                 <h2 className="text-lg font-semibold text-foreground mb-4">Order Summary</h2>
 
                 <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
@@ -238,6 +367,21 @@ const Checkout = () => {
                     <span>Shipping</span>
                     <span className="text-primary">Free</span>
                   </div>
+                  <div className="flex justify-between items-center text-sm text-muted-foreground">
+                    <span>Payment</span>
+                    <span className="flex items-center gap-1">
+                      {(() => {
+                        const method = paymentMethods.find(m => m.id === paymentMethod);
+                        const Icon = method?.icon || CreditCard;
+                        return (
+                          <>
+                            <Icon className="w-4 h-4" />
+                            {method?.label}
+                          </>
+                        );
+                      })()}
+                    </span>
+                  </div>
                   <div className="flex justify-between text-lg font-bold text-foreground pt-2">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
@@ -250,7 +394,7 @@ const Checkout = () => {
                   size="lg"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? 'Processing...' : `Pay $${total.toFixed(2)}`}
+                  {isProcessing ? 'Processing...' : paymentMethod === 'cod' ? 'Place Order' : `Pay $${total.toFixed(2)}`}
                 </Button>
               </div>
             </div>
