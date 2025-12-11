@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Product } from './CartContext';
 
+
 interface ProductContextType {
   products: Product[];
   addProduct: (product: Omit<Product, 'id'>) => void;
