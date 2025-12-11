@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingCart, Leaf, User, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingCart, Leaf, User, LogOut, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
@@ -66,6 +66,11 @@ const Navbar = () => {
 
             {isAuthenticated ? (
               <div className="flex items-center gap-3">
+                <Link to="/order-history">
+                  <Button variant="ghost" size="icon" title="Order History">
+                    <ClipboardList className="w-5 h-5" />
+                  </Button>
+                </Link>
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg">
                   <User className="w-4 h-4 text-primary" />
                   <span className="text-sm font-medium">{user?.name}</span>
@@ -129,6 +134,14 @@ const Navbar = () => {
                     <div className="px-4 py-3 text-sm text-muted-foreground">
                       Signed in as <span className="font-semibold text-foreground">{user?.name}</span>
                     </div>
+                    <Link
+                      to="/order-history"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center gap-2 px-4 py-3 rounded-lg font-medium text-muted-foreground hover:bg-muted"
+                    >
+                      <ClipboardList className="w-5 h-5" />
+                      Order History
+                    </Link>
                     <button
                       onClick={() => {
                         logout();

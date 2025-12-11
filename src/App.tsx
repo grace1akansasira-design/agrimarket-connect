@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { ProductProvider } from "@/context/ProductContext";
+import { OrderProvider } from "@/context/OrderContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Index from "./pages/Index";
@@ -18,6 +19,7 @@ import FarmerDashboard from "./pages/FarmerDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import AddProduct from "./pages/AddProduct";
 import ProductDetails from "./pages/ProductDetails";
+import OrderHistory from "./pages/OrderHistory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,31 +29,34 @@ const App = () => (
     <AuthProvider>
       <CartProvider>
         <ProductProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <div className="flex flex-col min-h-screen">
-                <Navbar />
-                <main className="flex-1">
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
-                    <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
-                    <Route path="/add-product" element={<AddProduct />} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </main>
-                <Footer />
-              </div>
-            </BrowserRouter>
-          </TooltipProvider>
+          <OrderProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <div className="flex flex-col min-h-screen">
+                  <Navbar />
+                  <main className="flex-1">
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
+                      <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
+                      <Route path="/add-product" element={<AddProduct />} />
+                      <Route path="/product/:id" element={<ProductDetails />} />
+                      <Route path="/order-history" element={<OrderHistory />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </div>
+              </BrowserRouter>
+            </TooltipProvider>
+          </OrderProvider>
         </ProductProvider>
       </CartProvider>
     </AuthProvider>

@@ -1,17 +1,20 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { CreditCard, Truck, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCart } from '@/context/CartContext';
+import { useOrders } from '@/context/OrderContext';
 import { toast } from '@/hooks/use-toast';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { items, total, clearCart } = useCart();
+  const { addOrder } = useOrders();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [orderId, setOrderId] = useState<string>('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -31,6 +34,19 @@ const Checkout = () => {
     // Simulate payment processing
     await new Promise(resolve => setTimeout(resolve, 2000));
 
+    // Create order
+    const newOrderId = addOrder({
+      items: [...items],
+      total,
+      shippingAddress: {
+        name: formData.name,
+        address: formData.address,
+        city: formData.city,
+        zip: formData.zip,
+      },
+    });
+
+    setOrderId(newOrderId);
     setIsProcessing(false);
     setIsComplete(true);
     clearCart();
@@ -51,12 +67,20 @@ const Checkout = () => {
           <h2 className="text-2xl font-bold font-display text-foreground mb-2">
             Order Confirmed!
           </h2>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-2">
             Thank you for your purchase. Your order will be delivered soon.
           </p>
-          <Button onClick={() => navigate('/products')}>
-            Continue Shopping
-          </Button>
+          <p className="text-sm text-muted-foreground mb-6">
+            Order ID: <span className="font-semibold text-foreground">#{orderId.toUpperCase()}</span>
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to="/order-history">
+              <Button variant="outline">View Order History</Button>
+            </Link>
+            <Button onClick={() => navigate('/products')}>
+              Continue Shopping
+            </Button>
+          </div>
         </div>
       </div>
     );
