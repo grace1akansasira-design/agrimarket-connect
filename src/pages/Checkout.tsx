@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useCart } from '@/context/CartContext';
 import { useOrders } from '@/context/OrderContext';
 import { toast } from '@/hooks/use-toast';
+import { formatPrice } from '@/lib/utils';
 
 type PaymentMethod = 'card' | 'mobile-money' | 'wallet' | 'cod';
 
@@ -327,7 +328,7 @@ const Checkout = () => {
                       Pay with cash when your order is delivered. Please have the exact amount ready.
                     </p>
                     <p className="text-sm font-medium text-foreground">
-                      Amount due: <span className="text-primary">${total.toFixed(2)}</span>
+                      Amount due: <span className="text-primary">{formatPrice(total)}</span>
                     </p>
                   </div>
                 </div>
@@ -351,7 +352,7 @@ const Checkout = () => {
                         <p className="font-medium text-foreground text-sm truncate">{item.name}</p>
                         <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                         <p className="text-sm font-medium text-primary">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          {formatPrice(item.price * item.quantity)}
                         </p>
                       </div>
                     </div>
@@ -361,7 +362,7 @@ const Checkout = () => {
                 <div className="border-t border-border pt-4 space-y-2">
                   <div className="flex justify-between text-muted-foreground">
                     <span>Subtotal</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>{formatPrice(total)}</span>
                   </div>
                   <div className="flex justify-between text-muted-foreground">
                     <span>Shipping</span>
@@ -384,7 +385,7 @@ const Checkout = () => {
                   </div>
                   <div className="flex justify-between text-lg font-bold text-foreground pt-2">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>{formatPrice(total)}</span>
                   </div>
                 </div>
 
@@ -394,7 +395,7 @@ const Checkout = () => {
                   size="lg"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? 'Processing...' : paymentMethod === 'cod' ? 'Place Order' : `Pay $${total.toFixed(2)}`}
+                  {isProcessing ? 'Processing...' : paymentMethod === 'cod' ? 'Place Order' : `Pay ${formatPrice(total)}`}
                 </Button>
               </div>
             </div>

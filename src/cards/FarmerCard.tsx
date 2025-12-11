@@ -1,6 +1,7 @@
 import { Edit2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/context/CartContext';
+import { formatPrice } from '@/lib/utils';
 
 interface FarmerCardProps {
   product: Product;
@@ -27,7 +28,7 @@ const FarmerCard = ({ product, onEdit, onDelete }: FarmerCardProps) => {
       <div className="p-4 space-y-3">
         <div>
           <h3 className="font-semibold text-foreground">{product.name}</h3>
-          <p className="text-lg font-bold text-primary">${product.price.toFixed(2)}</p>
+          <p className="text-lg font-bold text-primary">{formatPrice(product.price)}</p>
         </div>
 
         <div className="flex gap-2">

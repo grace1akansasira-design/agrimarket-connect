@@ -13,7 +13,7 @@ const initialProducts: Product[] = [
   {
     id: '1',
     name: 'Fresh Organic Tomatoes',
-    price: 4.99,
+    price: 18500,
     image: 'https://images.unsplash.com/photo-1546470427-0d4db154cde8?w=400&h=300&fit=crop',
     category: 'Vegetables',
     farmer: 'Green Valley Farm',
@@ -22,7 +22,7 @@ const initialProducts: Product[] = [
   {
     id: '2',
     name: 'Farm Fresh Eggs',
-    price: 6.99,
+    price: 25900,
     image: 'https://images.unsplash.com/photo-1518569656558-1f25e69d93d7?w=400&h=300&fit=crop',
     category: 'Dairy & Eggs',
     farmer: 'Happy Hen Farm',
@@ -31,7 +31,7 @@ const initialProducts: Product[] = [
   {
     id: '3',
     name: 'Organic Honey',
-    price: 12.99,
+    price: 48000,
     image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=300&fit=crop',
     category: 'Pantry',
     farmer: 'Bee Happy Apiary',
@@ -40,7 +40,7 @@ const initialProducts: Product[] = [
   {
     id: '4',
     name: 'Fresh Strawberries',
-    price: 5.99,
+    price: 22200,
     image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400&h=300&fit=crop',
     category: 'Fruits',
     farmer: 'Berry Good Farm',
@@ -49,7 +49,7 @@ const initialProducts: Product[] = [
   {
     id: '5',
     name: 'Organic Carrots',
-    price: 3.49,
+    price: 12900,
     image: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400&h=300&fit=crop',
     category: 'Vegetables',
     farmer: 'Root & Stem Farm',
@@ -58,7 +58,7 @@ const initialProducts: Product[] = [
   {
     id: '6',
     name: 'Artisan Goat Cheese',
-    price: 8.99,
+    price: 33300,
     image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=400&h=300&fit=crop',
     category: 'Dairy & Eggs',
     farmer: 'Mountain Meadow Dairy',
